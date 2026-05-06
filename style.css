@@ -265,8 +265,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-title {
     font-size: 4.5rem;
-    font-weight: 400;
-    letter-spacing: -1px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
     margin-bottom: 0.5rem;
     max-width: 900px;
 }
@@ -729,12 +730,54 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 768px) {
-    .mobile-menu-btn { display: block; }
-    .nav-list { display: none; }
-    .nav .btn-dark { display: none; }
+    .container { padding: 0 1.5rem; }
+    .mobile-menu-btn { display: block; position: relative; z-index: 101; }
+    
+    .nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-white);
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        align-items: flex-start;
+    }
+    
+    .nav.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .nav-list { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 1.5rem; 
+        width: 100%; 
+    }
+    
+    .nav-link { 
+        font-size: 1.1rem; 
+        display: block; 
+        width: 100%; 
+    }
+    
+    .nav .btn-primary { 
+        width: 100%; 
+        margin-top: 1rem; 
+        justify-content: center; 
+    }
     
     .hero { padding-top: 6rem; }
-    .hero-title { font-size: 2.5rem; }
+    .hero-title { font-size: 2.5rem; letter-spacing: -1px; }
     .hero-actions { flex-direction: column; align-items: flex-start; }
     
     .services-cards { grid-template-columns: 1fr; }
@@ -1082,13 +1125,15 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 768px) {
     .hero-illustration-wrapper {
         margin-top: 3rem;
-        max-width: 400px;
+        max-width: 320px;
     }
     .floating-card {
-        transform: scale(0.75);
+        transform: scale(0.65);
     }
-    /* Disable animation on small devices to prevent overflow issues */
+    .card-ml { left: -5%; }
+    .card-mr { right: -5%; }
+    /* Prevent overflow issues */
     .hero-right {
-        overflow: hidden;
+        overflow: visible;
     }
 }
