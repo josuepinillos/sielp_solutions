@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/*
+  Sielp Solutions tokens.
+  Palette comes from the brand brief (logo indigo + lavender + white).
+  Radius rule: interactive controls are full pills, containers use --radius-panel,
+  form fields use --radius-field. Nothing else.
+*/
+@theme {
+  --font-sans: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #17153f;
+  --color-ink-muted: #4f4e6c;
+  --color-ink-soft: #676683;
+  --color-indigo: #2520b6;
+  --color-indigo-deep: #1f19b4;
+  --color-indigo-electric: #0e05b3;
+  --color-indigo-night: #110d5c;
+  --color-lavender: #bbb9e7;
+  --color-lavender-soft: #e2e1f6;
+  --color-lavender-mist: #f1f0fa;
+  --color-canvas: #f9f9fb;
+  --color-paper: #ffffff;
+  --color-line: #e4e3ef;
+  --color-danger: #b42318;
+
+  --radius-panel: 28px;
+  --radius-field: 14px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    /* Real height of the sticky header. Header.tsx measures it and keeps this
+       in sync; the fallback (68px bar + 1px border) covers the first paint. */
+    --header-h: 69px;
+    /* Breathing room between the header and the start of a section reached
+       through an in-page link. */
+    --anchor-gap: 1.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    :root {
+      --anchor-gap: 2.5rem;
+    }
+  }
+
+  html {
+    scroll-padding-top: calc(var(--header-h) + var(--anchor-gap));
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Tailwind 4 resets buttons to the default cursor. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--color-indigo);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-indigo);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  /*
+    Section reached from the menu. Its top padding and its anchor offset share
+    --section-pt, so an in-page link lands on the section's visual start (its
+    first content) right below the header, not on the empty top padding.
+    Only affects where anchors land; the layout is the same padding as before.
+  */
+  .anchor-section {
+    --section-pt: 6rem;
+    padding-top: var(--section-pt);
+    scroll-margin-top: calc(var(--section-pt) * -1);
+  }
+
+  @media (min-width: 48rem) {
+    .anchor-section {
+      --section-pt: 8rem;
+    }
+  }
+
+  .text-display {
+    font-size: clamp(2.5rem, 1.05rem + 3.4vw, 3.625rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 620;
+  }
+
+  .text-h2 {
+    font-size: clamp(2.125rem, 1.4rem + 2.2vw, 3.25rem);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+
+  .text-h3 {
+    font-size: 1.375rem;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+
+  .text-lead {
+    font-size: clamp(1.0625rem, 0.98rem + 0.3vw, 1.1875rem);
+    line-height: 1.55;
+    color: var(--color-ink-muted);
+  }
+
+  .text-eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-indigo);
+  }
+}
+
+/*
+  Scroll reveal. Hidden only when JS is running (html.js, set before paint)
+  and the visitor has not asked for reduced motion; RevealObserver adds .is-in.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 24px), 0);
+    transition:
+      opacity 0.8s var(--ease-out-expo) var(--reveal-delay, 0s),
+      transform 0.8s var(--ease-out-expo) var(--reveal-delay, 0s);
+  }
+
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Hero entrance: runs on first paint, no JS needed. */
+  .rise {
+    animation: rise 0.9s var(--ease-out-expo) var(--rise-delay, 0s) both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

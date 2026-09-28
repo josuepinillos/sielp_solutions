@@ -1,0 +1,62 @@
+{
+  "hero": {
+    "width": 577,
+    "height": 1708,
+    "source": "render",
+    "temporary": false
+  },
+  "services": {
+    "width": 248,
+    "height": 250,
+    "source": "sheet",
+    "temporary": true
+  },
+  "dashboard": {
+    "width": 284,
+    "height": 250,
+    "source": "sheet",
+    "temporary": true
+  },
+  "idea": {
+    "width": 261,
+    "height": 259,
+    "source": "sheet",
+    "temporary": true
+  },
+  "events": {
+    "width": 220,
+    "height": 266,
+    "source": "sheet",
+    "temporary": true
+  },
+  "portfolio": {
+    "width": 228,
+    "height": 346,
+    "source": "sheet",
+    "temporary": true
+  },
+  "process": {
+    "width": 339,
+    "height": 222,
+    "source": "sheet",
+    "temporary": true
+  },
+  "testimonial": {
+    "width": 219,
+    "height": 252,
+    "source": "sheet",
+    "temporary": true
+  },
+  "cta": {
+    "width": 226,
+    "height": 346,
+    "source": "sheet",
+    "temporary": true
+  },
+  "contact": {
+    "width": 204,
+    "height": 251,
+    "source": "sheet",
+    "temporary": true
+  }
+}
