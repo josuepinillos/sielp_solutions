@@ -37,7 +37,7 @@ export function InvitationsHero() {
                 <Button href="#contacto" arrow>
                   Cuéntanos sobre tu evento
                 </Button>
-                <Button href="#proyectos" variant="secondary">
+                <Button href="#matrimonios" variant="secondary">
                   Ver invitaciones
                 </Button>
               </div>

@@ -6,7 +6,7 @@ dos rutas, una por línea de negocio:
 | Ruta | Línea | Secciones |
 | --- | --- | --- |
 | `/` | **Principal:** soluciones digitales para empresas, marcas y negocios | Hero, Nosotros, Servicios, Proyectos (solo empresariales), Proceso, Testimonios (oculta), CTA, Contacto |
-| `/invitacionesdigitales` | **Secundaria:** invitaciones digitales para eventos | Hero con demo interactiva, Tipos de eventos, Qué incluye, Proyectos (solo invitaciones), Proceso, CTA, Contacto |
+| `/invitacionesdigitales` | **Secundaria:** invitaciones digitales para eventos | Hero con demo interactiva, "Elige el tipo de evento", Matrimonios (Plan Plus, destacado), Cumpleaños, Baby showers, Proceso, CTA, Contacto |
 
 La home solo enlaza a invitaciones de forma secundaria: un enlace discreto en el header, una
 línea al final de Servicios y el footer. Header, Footer, Portfolio, Process, FinalCta y
@@ -62,25 +62,36 @@ y el mensaje indica "Invitación digital", así cada consulta llega identificada
 
 ## Proyectos
 
-Cada ruta muestra capturas reales de sus propios proyectos publicados: la home, los empresariales
-(raulpinillos.com); `/invitacionesdigitales`, las invitaciones (josueyclaudia.com,
-kevyndavila.com). Cada tarjeta abre el sitio en una pestaña nueva. El campo `line` de
-`src/content/projects.ts` ("empresas" o "invitaciones") decide dónde aparece cada proyecto.
+Cada ruta muestra capturas reales de sus propios proyectos publicados. En `src/content/projects.ts`:
+
+- `line` ("empresas" o "invitaciones") decide la ruta: la home muestra los empresariales
+  (raulpinillos.com, como "Nuestro proyecto más reciente.").
+- `category` ("matrimonios", "cumpleanos", "baby-showers") ubica cada invitación en su sección de
+  `/invitacionesdigitales`: Matrimonios (bodasielplvltwo.vercel.app), Cumpleaños
+  (kevyndavila.com) y Baby showers (josueyclaudia.com).
+- `demo` y `plan` marcan una demo propia de Sielp que muestra un nivel de producto. La boda de
+  Josué y Claudia es la demo del **Plan Plus**: se presenta como "Plan Plus · Demo", nunca como
+  trabajo para un cliente, y sus `highlights` listan solo lo que la invitación publicada incluye.
+
+Las categorías y los planes están en `src/content/invitaciones.ts`. No hay precios publicados; para
+sumar planes (por ejemplo Básico o Premium) se agregan ahí y se asignan con `plan`.
+
+Ninguna invitación se incrusta en la página (sin iframes): se muestran capturas y cada tarjeta abre
+el sitio real en una pestaña nueva, así no se descarga nada externo hasta que el visitante lo pide.
 
 ```bash
-npm run capture:projects                 # vuelve a capturar los tres sitios
-npm run capture:projects raulpinillos    # solo uno
+npm run capture:projects                    # vuelve a capturar todos los sitios
+npm run capture:projects bodasielplvltwo    # solo uno
 ```
 
 El script (`scripts/capture_projects.mjs`) abre cada URL con el Microsoft Edge instalado
 (`CAPTURE_CHANNEL=chrome` para usar Chrome), captura la primera pantalla a 1440x900 en 2x
-y guarda el PNG original en `assets/projects/` y el WebP 1600x1000 que usa la web en
-`public/projects/`. Si un sitio no se puede capturar, lo informa y no genera nada en su lugar.
+(y, para los sitios marcados `mobile: true`, también a 390x844 en 3x para el mockup de celular)
+y guarda el PNG original en `assets/projects/` y el WebP que usa la web en `public/projects/`.
+Si un sitio no se puede capturar, lo informa y no genera nada en su lugar.
 
 Para sumar un proyecto: agrega su URL al script, captura, y añade la entrada al inicio de
-`src/content/projects.ts` con su `line`. Cada sección muestra los 3 más recientes de su línea y
-adapta el diseño a la cantidad (1 proyecto: fila destacada; 2 o 3: columnas del mismo tamaño).
-Con un solo proyecto empresarial, la home lo presenta como "Nuestro proyecto más reciente."
+`src/content/projects.ts` con su `line` (y su `category` si es una invitación).
 
 ## Mascota
 

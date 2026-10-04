@@ -1,13 +1,14 @@
 import Image from "next/image";
 import { ArrowRight, LockSimple } from "@phosphor-icons/react/dist/ssr";
+import { categoryById } from "@/content/invitaciones";
 import type { Project } from "@/content/projects";
 import { Reveal } from "../Reveal";
 
 // A quiet browser window around a real screenshot of the published site.
 // The frame, not the capture, sets the size: a fixed 16:10 viewport the
 // capture fills with object-cover (never stretched). On hover the card lifts a
-// little and the capture zooms.
-function BrowserFrame({ project, sizes }: { project: Project; sizes: string }) {
+// little and the capture zooms. Shared with the invitation categories.
+export function BrowserFrame({ project, sizes }: { project: Project; sizes: string }) {
   return (
     <div className="overflow-hidden rounded-[20px] border border-line bg-paper shadow-[0_28px_60px_-40px_rgba(23,21,63,0.35)] transition-[transform,box-shadow] duration-500 ease-out-expo group-hover:-translate-y-1 group-hover:shadow-[0_36px_72px_-38px_rgba(23,21,63,0.45)]">
       <div aria-hidden className="flex h-8 items-center border-b border-line px-3.5 md:h-9">
@@ -34,23 +35,23 @@ function BrowserFrame({ project, sizes }: { project: Project; sizes: string }) {
   );
 }
 
-function Caption({ project }: { project: Project }) {
+export function Caption({ project }: { project: Project }) {
   return (
     <div className="pt-2">
       <h3 className="text-h3">{project.domain}</h3>
       <p className="mt-1 text-[0.9375rem] font-medium text-indigo">
         {project.label}
-        {project.event && <span className="text-ink-muted"> · {project.event}</span>}
+        {project.category && <span className="text-ink-muted"> · {categoryById(project.category).singular}</span>}
       </p>
       <p className="mt-3 max-w-[46ch] text-ink-muted">{project.description}</p>
     </div>
   );
 }
 
-function ViewLink() {
+export function ViewLink({ label = "Ver proyecto" }: { label?: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 self-start font-medium text-ink transition-colors duration-300 group-hover:text-indigo">
-      Ver proyecto
+      {label}
       <ArrowRight
         aria-hidden
         className="size-4 transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
@@ -60,7 +61,7 @@ function ViewLink() {
   );
 }
 
-const external = { target: "_blank", rel: "noopener noreferrer" } as const;
+export const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 /*
   Real projects of one line (see src/content/projects.ts). The layout adapts to

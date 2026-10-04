@@ -62,10 +62,11 @@ export const homeNav: NavItem[] = [
   { label: "Nosotros", href: "#nosotros", id: "nosotros" },
 ];
 
+// Invitations: one item per category (anchors from src/content/invitaciones.ts).
 export const invitationsNav: NavItem[] = [
-  { label: "Eventos", href: "#eventos", id: "eventos" },
-  { label: "Qué incluye", href: "#incluye", id: "incluye" },
-  { label: "Proyectos", href: "#proyectos", id: "proyectos" },
+  { label: "Matrimonios", href: "#matrimonios", id: "matrimonios" },
+  { label: "Cumpleaños", href: "#cumpleanos", id: "cumpleanos" },
+  { label: "Baby showers", href: "#babyshowers", id: "babyshowers" },
   { label: "Proceso", href: "#proceso", id: "proceso" },
 ];
 

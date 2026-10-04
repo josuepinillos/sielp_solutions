@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { EventTypes } from "@/components/invitaciones/EventTypes";
-import { Features } from "@/components/invitaciones/Features";
+import { InvitationCategories } from "@/components/invitaciones/InvitationCategories";
+import { InvitationCategoryNav } from "@/components/invitaciones/InvitationCategoryNav";
 import { InvitationsHero } from "@/components/invitaciones/InvitationsHero";
+import { WeddingSection } from "@/components/invitaciones/WeddingSection";
 import { Contact } from "@/components/sections/Contact";
 import { FinalCta } from "@/components/sections/FinalCta";
-import { Portfolio } from "@/components/sections/Portfolio";
 import { Process, type ProcessStep } from "@/components/sections/Process";
-import { latestProjects } from "@/content/projects";
 import { invitationsNav, routes } from "@/content/site";
 
 // Secondary line of Sielp Solutions: digital invitations for events.
@@ -34,6 +33,8 @@ const steps: ProcessStep[] = [
   { title: "Publicamos y compartes", body: "Te entregamos el enlace para que lo envíes a tus invitados." },
 ];
 
+// Order: hero, category nav, Matrimonios (Plan Plus demo), Cumpleaños,
+// Baby showers, process, CTA, contact.
 export default function InvitacionesDigitales() {
   return (
     <>
@@ -45,13 +46,9 @@ export default function InvitacionesDigitales() {
       />
       <main id="contenido">
         <InvitationsHero />
-        <EventTypes />
-        <Features />
-        <Portfolio
-          projects={latestProjects("invitaciones")}
-          title="Invitaciones que hemos creado."
-          lead="Invitaciones reales, diseñadas y desarrolladas por Sielp para celebraciones recientes."
-        />
+        <InvitationCategoryNav />
+        <WeddingSection />
+        <InvitationCategories />
         <Process
           title="De tu idea al enlace que compartes."
           lead="Te acompañamos desde la primera conversación hasta que envías tu invitación."
