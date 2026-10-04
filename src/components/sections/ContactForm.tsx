@@ -7,44 +7,70 @@ import { whatsappUrl } from "@/content/site";
 import { Avatar } from "../Avatar";
 import { buttonClass } from "../Button";
 
-const serviceOptions = [
-  "Desarrollo web",
-  "Landing page",
-  "Dashboard",
-  "Solución digital a medida",
-  "Invitación digital para un evento",
-  "Otro",
-];
-
 type Errors = Partial<Record<"name" | "message", string>>;
+
+export type ContactVariant = "empresas" | "eventos";
+
+/*
+  Same form and fields for both lines of the business; only the labels,
+  options and the prefilled WhatsApp message change, so each lead arrives
+  clearly identified.
+*/
+const variants = {
+  empresas: {
+    companyLabel: "Empresa o marca",
+    companyAutoComplete: "organization",
+    selectLabel: "Servicio",
+    options: ["Desarrollo web", "Landing page", "Dashboard", "Solución digital a medida", "Otro"],
+    hint: "Qué quieres crear, para quién y si tienes una fecha en mente.",
+    shortMessage: "Cuéntanos un poco más sobre tu idea (al menos 10 caracteres).",
+    companyLine: (value: string) => `Empresa o marca: ${value}`,
+    interestLine: (value: string) => (value ? `Estoy interesado/a en: ${value}` : ""),
+  },
+  eventos: {
+    companyLabel: "Nombre del evento",
+    companyAutoComplete: "off",
+    selectLabel: "Tipo de evento",
+    options: ["Matrimonio", "Cumpleaños", "Baby shower", "Bautizo", "Aniversario", "Otra celebración"],
+    hint: "La fecha, el lugar y cómo imaginas tu invitación.",
+    shortMessage: "Cuéntanos un poco más sobre tu evento (al menos 10 caracteres).",
+    companyLine: (value: string) => `Evento: ${value}`,
+    interestLine: (value: string) =>
+      `Estoy interesado/a en: Invitación digital${value ? ` (${value})` : ""}`,
+  },
+} as const;
 
 const fieldClass =
   "w-full rounded-field border border-line bg-canvas px-4 text-ink transition-[border-color,box-shadow] duration-200 hover:border-ink/25 focus:border-indigo focus:shadow-[0_0_0_4px_rgba(37,32,182,0.14)] focus-visible:outline-none aria-[invalid=true]:border-danger";
 
 // The message the visitor sees prefilled in WhatsApp (they send it themselves).
 export function buildWhatsappMessage({
+  variant,
   name,
   company,
   service,
   message,
 }: {
+  variant: ContactVariant;
   name: string;
   company: string;
   service: string;
   message: string;
 }) {
+  const config = variants[variant];
   return [
     "Hola Sielp Solutions.",
     `Mi nombre es ${name}.`,
-    company && `Empresa o evento: ${company}`,
-    service && `Estoy interesado/a en: ${service}`,
+    company && config.companyLine(company),
+    config.interestLine(service),
     `Mensaje:\n${message}`,
   ]
     .filter(Boolean)
     .join("\n\n");
 }
 
-export function ContactForm() {
+export function ContactForm({ variant = "empresas" }: { variant?: ContactVariant }) {
+  const config = variants[variant];
   const id = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors>({});
@@ -61,7 +87,7 @@ export function ContactForm() {
 
     const nextErrors: Errors = {};
     if (!name) nextErrors.name = "Escribe tu nombre.";
-    if (message.length < 10) nextErrors.message = "Cuéntanos un poco más sobre tu idea (al menos 10 caracteres).";
+    if (message.length < 10) nextErrors.message = config.shortMessage;
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       const first = nextErrors.name ? "name" : "message";
@@ -69,7 +95,7 @@ export function ContactForm() {
       return;
     }
 
-    const url = whatsappUrl(buildWhatsappMessage({ name, company, service, message }));
+    const url = whatsappUrl(buildWhatsappMessage({ variant, name, company, service, message }));
     window.open(url, "_blank", "noopener,noreferrer");
     setSender(name.split(" ")[0]);
     setSentUrl(url);
@@ -148,12 +174,12 @@ export function ContactForm() {
               </div>
               <div className="grid gap-2">
                 <label htmlFor={`${id}-company`} className="text-[0.9375rem] font-medium">
-                  Empresa o evento <span className="font-normal text-ink-soft">(opcional)</span>
+                  {config.companyLabel} <span className="font-normal text-ink-soft">(opcional)</span>
                 </label>
                 <input
                   id={`${id}-company`}
                   name="company"
-                  autoComplete="organization"
+                  autoComplete={config.companyAutoComplete}
                   className={`${fieldClass} h-12`}
                 />
               </div>
@@ -161,7 +187,7 @@ export function ContactForm() {
 
             <div className="grid gap-2">
               <label htmlFor={`${id}-service`} className="text-[0.9375rem] font-medium">
-                Servicio
+                {config.selectLabel}
               </label>
               <div className="relative">
                 <select
@@ -171,7 +197,7 @@ export function ContactForm() {
                   className={`${fieldClass} h-12 appearance-none pr-11`}
                 >
                   <option value="">Selecciona una opción</option>
-                  {serviceOptions.map((option) => (
+                  {config.options.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
@@ -198,7 +224,7 @@ export function ContactForm() {
                 className={`${fieldClass} resize-y py-3 leading-relaxed`}
               />
               <p id={`${id}-message-hint`} className="text-sm text-ink-muted">
-                Qué quieres crear, para quién y si tienes una fecha en mente.
+                {config.hint}
               </p>
               {errors.message && (
                 <p id={`${id}-message-error`} className="text-sm text-danger">

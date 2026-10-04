@@ -6,7 +6,16 @@ import { Avatar } from "../Avatar";
 import { Button } from "../Button";
 import { Reveal } from "../Reveal";
 
-export function FinalCta() {
+// Defaults: the business CTA of the home.
+export function FinalCta({
+  title = ["¿Tienes una idea?", "Hagámosla digital."],
+  text = "Cuéntanos qué quieres crear y encontremos juntos la forma de convertirlo en una experiencia digital.",
+  cta = "Empezar un proyecto",
+}: {
+  title?: [string, string];
+  text?: string;
+  cta?: string;
+}) {
   // The mascot celebrates from behind the panel, above the button, and jumps a
   // little higher when the visitor is about to press it.
   const [eager, setEager] = useState(false);
@@ -37,11 +46,9 @@ export function FinalCta() {
                   id="cta-title"
                   className="text-[clamp(2.25rem,1.2rem+3.6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.035em]"
                 >
-                  <span className="block">¿Tienes una idea?</span> <span className="block">Hagámosla digital.</span>
+                  <span className="block">{title[0]}</span> <span className="block">{title[1]}</span>
                 </h2>
-                <p className="mt-6 max-w-[32rem] text-[1.125rem] leading-relaxed text-lavender-soft">
-                  Cuéntanos qué quieres crear y encontremos juntos la forma de convertirlo en una experiencia digital.
-                </p>
+                <p className="mt-6 max-w-[32rem] text-[1.125rem] leading-relaxed text-lavender-soft">{text}</p>
               </div>
 
               <div
@@ -52,7 +59,7 @@ export function FinalCta() {
                 onBlur={() => setEager(false)}
               >
                 <Button href="#contacto" variant="inverse" arrow>
-                  Empezar un proyecto
+                  {cta}
                 </Button>
               </div>
             </div>

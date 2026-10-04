@@ -2,7 +2,7 @@ import { ArrowRight, ArrowUpRight, EnvelopeSimple, InstagramLogo, WhatsappLogo }
 import { getChannels, whatsappUrl, type ChannelId } from "@/content/site";
 import { buttonClass } from "../Button";
 import { Reveal } from "../Reveal";
-import { ContactForm } from "./ContactForm";
+import { ContactForm, type ContactVariant } from "./ContactForm";
 
 const channelIcons: Record<ChannelId, typeof WhatsappLogo> = {
   whatsapp: WhatsappLogo,
@@ -12,8 +12,23 @@ const channelIcons: Record<ChannelId, typeof WhatsappLogo> = {
 
 const newTab = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-export function Contact() {
+// Same channels and form for both lines; the copy, the form options and the
+// WhatsApp greeting adapt to the page (see ContactForm variants).
+const copy: Record<ContactVariant, { title: string; lead: string; whatsappText?: string }> = {
+  empresas: {
+    title: "Hablemos.",
+    lead: "Cuéntanos qué necesitas. Escríbenos por WhatsApp, Instagram o email, o déjanos un mensaje.",
+  },
+  eventos: {
+    title: "Hablemos de tu evento.",
+    lead: "Escríbenos por WhatsApp, Instagram o email, o déjanos los detalles de tu celebración.",
+    whatsappText: "Hola Sielp Solutions. Me interesa una invitación digital para mi evento.",
+  },
+};
+
+export function Contact({ variant = "empresas" }: { variant?: ContactVariant }) {
   const channels = getChannels();
+  const { title, lead, whatsappText } = copy[variant];
 
   return (
     <section
@@ -24,13 +39,11 @@ export function Contact() {
       <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <Reveal>
-            <h2 id="contact-title" className="text-h2">
-              Hablemos.
+            <h2 id="contact-title" className="text-h2 max-w-[14ch]">
+              {title}
             </h2>
-            <p className="text-lead mt-6 max-w-[28rem]">
-              Cuéntanos qué necesitas. Escríbenos por WhatsApp, Instagram o email, o déjanos un mensaje.
-            </p>
-            <a href={whatsappUrl()} {...newTab} className={buttonClass("primary", "mt-8")}>
+            <p className="text-lead mt-6 max-w-[28rem]">{lead}</p>
+            <a href={whatsappUrl(whatsappText)} {...newTab} className={buttonClass("primary", "mt-8")}>
               <WhatsappLogo aria-hidden className="size-5" />
               Escribir por WhatsApp
               <ArrowRight
@@ -72,7 +85,7 @@ export function Contact() {
 
         <div className="lg:col-span-7">
           <Reveal delay={0.08}>
-            <ContactForm />
+            <ContactForm variant={variant} />
           </Reveal>
         </div>
       </div>

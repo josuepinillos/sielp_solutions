@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "assets": "python scripts/build_avatars.py",
-    "capture:projects": "node scripts/capture_projects.mjs"
+    "capture:projects": "node scripts/capture_projects.mjs",
+    "og": "node scripts/build_og.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

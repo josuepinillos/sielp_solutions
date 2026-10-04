@@ -1,7 +1,22 @@
 # Sielp Solutions: sitio web
 
-Next.js 16 + Tailwind CSS 4 + Motion. Una sola página con: Hero, Nosotros, Servicios,
-Proyectos, Proceso, Experiencias para eventos, Testimonios, CTA, Contacto y Footer.
+Next.js 16 (App Router) + Tailwind CSS 4 + Motion. Un solo proyecto y un solo deployment con
+dos rutas, una por línea de negocio:
+
+| Ruta | Línea | Secciones |
+| --- | --- | --- |
+| `/` | **Principal:** soluciones digitales para empresas, marcas y negocios | Hero, Nosotros, Servicios, Proyectos (solo empresariales), Proceso, Testimonios (oculta), CTA, Contacto |
+| `/invitacionesdigitales` | **Secundaria:** invitaciones digitales para eventos | Hero con demo interactiva, Tipos de eventos, Qué incluye, Proyectos (solo invitaciones), Proceso, CTA, Contacto |
+
+La home solo enlaza a invitaciones de forma secundaria: un enlace discreto en el header, una
+línea al final de Servicios y el footer. Header, Footer, Portfolio, Process, FinalCta y
+Contact se comparten entre ambas rutas y reciben por props lo que cambia (navegación, textos,
+proyectos, variante del formulario). Lo exclusivo de invitaciones vive en
+`src/components/invitaciones/` y solo se carga en su ruta.
+
+SEO por ruta: cada `page.tsx` define título, descripción, URL canónica y Open Graph; la imagen
+para compartir es el `opengraph-image.png` de cada carpeta de ruta. `src/app/sitemap.ts` y
+`src/app/robots.ts` publican ambas rutas.
 
 ## Ejecutar
 
@@ -20,8 +35,19 @@ avisos ni placeholders en la web.
 | Qué | Dónde |
 | --- | --- |
 | Logotipo oficial | Copiar a `public/brand/` y completar `logo` en `src/content/site.ts` |
-| Dominio público | `url` en `src/content/site.ts` |
+| Ícono definitivo | `src/app/icon.png` y `apple-icon.png` son una "S" provisoria (`npm run og`); reemplazar por el logo |
 | Testimonios reales | `src/content/testimonials.ts` (la sección se oculta mientras esté vacía) |
+
+## Imágenes para compartir
+
+```bash
+npm run og   # regenera los Open Graph de cada ruta y el ícono provisorio
+```
+
+`scripts/build_og.mjs` renderiza con el Edge instalado una tarjeta de 1200x630 con la tipografía
+y la mascota de la marca: `src/app/opengraph-image.png` (home, línea empresarial) y
+`src/app/invitacionesdigitales/opengraph-image.png` (invitaciones). Necesita internet para
+cargar la tipografía.
 
 ## Contacto
 
@@ -30,12 +56,16 @@ email (administador@sielpsolutions.com). Se configuran en un solo lugar, `contac
 `src/content/site.ts`, y de ahí los toman la sección Contacto y el footer.
 
 El formulario valida los campos y abre WhatsApp con un mensaje ya redactado a partir de lo que
-escribió el visitante; el envío final lo hace siempre el visitante desde WhatsApp.
+escribió el visitante; el envío final lo hace siempre el visitante desde WhatsApp. Tiene una
+variante por línea: en la home pide empresa y servicio; en invitaciones, evento y tipo de evento,
+y el mensaje indica "Invitación digital", así cada consulta llega identificada.
 
 ## Proyectos
 
-El portfolio muestra capturas reales de los sitios publicados (raulpinillos.com,
-josueyclaudia.com, kevyndavila.com). Cada tarjeta abre el sitio en una pestaña nueva.
+Cada ruta muestra capturas reales de sus propios proyectos publicados: la home, los empresariales
+(raulpinillos.com); `/invitacionesdigitales`, las invitaciones (josueyclaudia.com,
+kevyndavila.com). Cada tarjeta abre el sitio en una pestaña nueva. El campo `line` de
+`src/content/projects.ts` ("empresas" o "invitaciones") decide dónde aparece cada proyecto.
 
 ```bash
 npm run capture:projects                 # vuelve a capturar los tres sitios
@@ -48,8 +78,9 @@ y guarda el PNG original en `assets/projects/` y el WebP 1600x1000 que usa la we
 `public/projects/`. Si un sitio no se puede capturar, lo informa y no genera nada en su lugar.
 
 Para sumar un proyecto: agrega su URL al script, captura, y añade la entrada al inicio de
-`src/content/projects.ts`. La sección ("Nuestros 3 últimos proyectos.") muestra siempre los
-3 más recientes, con el mismo tamaño de tarjeta.
+`src/content/projects.ts` con su `line`. Cada sección muestra los 3 más recientes de su línea y
+adapta el diseño a la cantidad (1 proyecto: fila destacada; 2 o 3: columnas del mismo tamaño).
+Con un solo proyecto empresarial, la home lo presenta como "Nuestro proyecto más reciente."
 
 ## Mascota
 
@@ -83,12 +114,12 @@ Dónde aparece la mascota (y dónde no, a propósito):
 
 | Sección | Pose | Mensaje |
 | --- | --- | --- |
-| Hero | `hero` (corazón, bajo un arco) | Bienvenido a Sielp |
-| Nosotros | `idea` (puf, café, bombilla) | Somos una marca humana |
-| Servicios | `services` / `dashboard` al pasar por Dashboards | Creamos soluciones / trabajamos con tecnología |
-| Eventos | `events` (muestra un celular) | Creamos experiencias |
-| CTA | `cta` (se asoma celebrando detrás del panel y reacciona al pasar por el botón) | Hablemos |
-| Formulario enviado | `contact` (saluda) | Gracias |
+| Home: Hero | `hero` (corazón, bajo un arco) | Bienvenido a Sielp |
+| Home: Nosotros | `idea` (puf, café, bombilla) | Somos una marca humana |
+| Home: Servicios | `services` / `dashboard` al pasar por Dashboards | Creamos soluciones / trabajamos con tecnología |
+| Invitaciones: Hero | `events` (muestra un celular junto a la demo) | Creamos experiencias |
+| CTA (ambas rutas) | `cta` (se asoma celebrando detrás del panel y reacciona al pasar por el botón) | Hablemos |
+| Formulario enviado (ambas) | `contact` (saluda) | Gracias |
 
 Proyectos, Proceso, Contacto y Footer no llevan mascota: en Proyectos los sitios
 reales son los protagonistas, y en el resto su ausencia da ritmo a la página.

@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Baby, Cake, CalendarBlank, Champagne, Check, Eye, Heart, MapPin, Sparkle } from "@phosphor-icons/react";
-import { Avatar } from "../Avatar";
-import { Reveal } from "../Reveal";
+import { Baby, Cake, CalendarBlank, Champagne, Check, Drop, Heart, MapPin } from "@phosphor-icons/react";
 
-const invitations = [
+// Sample event types for the live demo (no real data).
+export const demoInvitations = [
   {
     id: "matrimonio",
     label: "Matrimonio",
@@ -34,7 +33,7 @@ const invitations = [
   {
     id: "bautizo",
     label: "Bautizo",
-    icon: Sparkle,
+    icon: Drop,
     title: "Mi bautizo",
     message: "Acompáñanos en este día tan especial.",
     cover: "linear-gradient(170deg,#2F29BE 0%,#5049CF 62%,#9A96E3 100%)",
@@ -49,8 +48,8 @@ const invitations = [
   },
 ];
 
-// A working miniature of an invitation (not a screenshot): switching the
-// event type re-themes it and the RSVP button responds like the real one.
+export type DemoInvitation = (typeof demoInvitations)[number];
+
 // Sample event date for the demo: the first Saturday at least ten days away,
 // 7:00 p. m. local time. Computed on the client so it is always in the future.
 function sampleEventDate() {
@@ -99,7 +98,9 @@ function Countdown() {
   );
 }
 
-function InvitationPreview({ invite }: { invite: (typeof invitations)[number] }) {
+// A working miniature of an invitation (not a screenshot): switching the
+// event type re-themes it and the RSVP button responds like the real one.
+export function InvitationPreview({ invite }: { invite: DemoInvitation }) {
   const [confirmed, setConfirmed] = useState(false);
   const Icon = invite.icon;
 
@@ -165,89 +166,5 @@ function InvitationPreview({ invite }: { invite: (typeof invitations)[number] })
         </AnimatePresence>
       </div>
     </div>
-  );
-}
-
-export function Events() {
-  const [selected, setSelected] = useState(invitations[0]);
-
-  return (
-    <section id="eventos" aria-labelledby="events-title" className="anchor-section pb-24 md:pb-32">
-      <div className="shell">
-        <div className="relative overflow-hidden rounded-panel bg-[radial-gradient(90%_70%_at_100%_100%,var(--color-lavender-soft)_0%,rgba(226,225,246,0)_70%),linear-gradient(180deg,var(--color-lavender-mist),var(--color-canvas))] px-6 pt-12 md:px-12 md:pt-16 lg:px-16">
-          <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
-            <div className="lg:col-span-6 lg:pb-20">
-              <Reveal>
-                <p className="text-eyebrow">Invitaciones digitales</p>
-                <h2 id="events-title" className="text-h2 mt-4 max-w-[14ch]">
-                  Tu evento comienza antes del gran día.
-                </h2>
-                <p className="text-lead mt-6 max-w-[34rem]">
-                  Creamos invitaciones digitales que no solo informan. Presentan tu historia, generan expectativa y
-                  convierten una invitación en una experiencia.
-                </p>
-              </Reveal>
-
-              <Reveal delay={0.08}>
-                <p id="event-type-label" className="mt-10 text-sm font-medium text-ink-muted">
-                  Elige un tipo de evento
-                </p>
-                <div role="group" aria-labelledby="event-type-label" className="mt-3 flex flex-wrap gap-2">
-                  {invitations.map((invite) => {
-                    const isSelected = invite.id === selected.id;
-                    return (
-                      <button
-                        key={invite.id}
-                        type="button"
-                        aria-pressed={isSelected}
-                        onClick={() => setSelected(invite)}
-                        className={`relative h-10 rounded-full px-4 text-[0.9375rem] font-medium transition-colors ${
-                          isSelected ? "text-paper" : "border border-line bg-paper/80 text-ink-muted hover:text-ink"
-                        }`}
-                      >
-                        {isSelected && (
-                          <motion.span
-                            layoutId="event-pill"
-                            aria-hidden
-                            className="absolute inset-0 rounded-full bg-indigo"
-                            transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                          />
-                        )}
-                        <span className="relative">{invite.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <p className="mt-4 text-sm text-ink-soft">
-                  También para celebraciones y eventos especiales.
-                </p>
-              </Reveal>
-            </div>
-
-            <div className="relative flex min-h-[36rem] items-end justify-center lg:col-span-6 lg:justify-start xl:pl-6">
-              <Reveal className="relative z-10 mb-10 md:mb-14">
-                <p className="mb-4 flex items-center justify-center gap-2 text-sm font-medium text-ink-muted">
-                  <Eye aria-hidden className="size-4 text-indigo" />
-                  Vista de ejemplo, sin datos reales
-                </p>
-                <InvitationPreview invite={selected} />
-                <p className="sr-only" aria-live="polite">
-                  Vista de ejemplo: invitación de {selected.label.toLowerCase()}
-                </p>
-              </Reveal>
-              {/* She rises from the bottom edge, just behind the phone. Narrower
-                  from 1024 to 1279 px, where the column is tight, so the phone
-                  never covers her face. */}
-              <Reveal
-                delay={0.15}
-                className="absolute right-0 bottom-0 z-0 hidden w-[11rem] sm:block md:w-[13rem] lg:w-[10rem] xl:w-[13rem]"
-              >
-                <Avatar name="events" sizes="208px" className="ml-auto w-full" />
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }

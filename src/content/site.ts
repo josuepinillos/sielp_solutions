@@ -4,12 +4,12 @@
 
 export const site = {
   name: "Sielp Solutions",
-  // Dominio público, p. ej. "https://midominio.com". Se usa para las vistas
+  // Dominio público. Se usa para URLs canónicas, el sitemap y las vistas
   // previas al compartir la web en redes y mensajería.
-  url: "",
-  tagline: "Digital experiences for businesses, brands & events.",
+  url: "https://www.sielpsolutions.com",
+  tagline: "Soluciones digitales para empresas, marcas y negocios.",
   description:
-    "Diseñamos y desarrollamos experiencias digitales para empresas, marcas y momentos que merecen ser recordados.",
+    "Diseñamos y desarrollamos sitios web, landing pages, dashboards y soluciones digitales a medida para empresas, marcas y negocios.",
 
   // Logotipo oficial. Copia el archivo a /public/brand/ y completa la ruta y
   // sus dimensiones, p. ej. { src: "/brand/sielp-logo.svg", width: 160, height: 40 }.
@@ -38,13 +38,36 @@ export function whatsappUrl(text?: string) {
   return text ? `${base}?text=${encodeURIComponent(text)}` : base;
 }
 
-export const nav = [
+/*
+  Arquitectura: la home es la línea principal (soluciones digitales para
+  empresas) e invitaciones digitales es una línea secundaria con su propia ruta.
+*/
+export const routes = {
+  home: "/",
+  invitations: "/invitacionesdigitales",
+} as const;
+
+export const lines = [
+  { label: "Soluciones digitales", href: routes.home },
+  { label: "Invitaciones digitales", href: routes.invitations },
+] as const;
+
+export type NavItem = { label: string; href: string; id: string };
+
+// In-page navigation of each route (anchors to its own sections). Contact is
+// not a nav item: the header's "Hablemos" button is the single way there.
+export const homeNav: NavItem[] = [
   { label: "Servicios", href: "#servicios", id: "servicios" },
   { label: "Proyectos", href: "#proyectos", id: "proyectos" },
-  { label: "Experiencias", href: "#eventos", id: "eventos" },
   { label: "Nosotros", href: "#nosotros", id: "nosotros" },
-  { label: "Contacto", href: "#contacto", id: "contacto" },
-] as const;
+];
+
+export const invitationsNav: NavItem[] = [
+  { label: "Eventos", href: "#eventos", id: "eventos" },
+  { label: "Qué incluye", href: "#incluye", id: "incluye" },
+  { label: "Proyectos", href: "#proyectos", id: "proyectos" },
+  { label: "Proceso", href: "#proceso", id: "proceso" },
+];
 
 export type ChannelId = "whatsapp" | "instagram" | "email";
 

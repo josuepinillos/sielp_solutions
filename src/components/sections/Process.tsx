@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useScroll, useSpring } from "motion/react";
 import { Reveal } from "../Reveal";
 
-const steps = [
+export type ProcessStep = { title: string; body: string };
+
+// Default: the process for business projects (home).
+const businessSteps: ProcessStep[] = [
   { title: "Descubrimos", body: "Escuchamos tu idea, tus objetivos y a quién quieres llegar." },
   { title: "Diseñamos", body: "Definimos la estructura y el diseño visual antes de escribir código." },
   { title: "Desarrollamos", body: "Construimos una experiencia rápida, clara y adaptada a cualquier pantalla." },
@@ -54,24 +57,30 @@ function Step({
   );
 }
 
-export function Process() {
+export function Process({
+  title = "De una idea a una experiencia.",
+  lead = "Un proceso claro, en el que participas desde la primera conversación hasta el lanzamiento.",
+  steps = businessSteps,
+}: {
+  title?: string;
+  lead?: string;
+  steps?: ProcessStep[];
+}) {
   const [active, setActive] = useState(0);
   const listRef = useRef<HTMLOListElement>(null);
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 60%", "end 55%"] });
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
 
   return (
-    <section id="proceso" aria-labelledby="process-title" className="py-24 md:py-32">
+    <section id="proceso" aria-labelledby="process-title" className="anchor-section pb-24 md:pb-32">
       <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-28">
             <Reveal>
-              <h2 id="process-title" className="text-h2 max-w-[12ch]">
-                De una idea a una experiencia.
+              <h2 id="process-title" className="text-h2 max-w-[14ch]">
+                {title}
               </h2>
-              <p className="text-lead mt-6 max-w-[30rem]">
-                Un proceso claro, en el que participas desde la primera conversación hasta el lanzamiento.
-              </p>
+              <p className="text-lead mt-6 max-w-[30rem]">{lead}</p>
             </Reveal>
           </div>
         </div>

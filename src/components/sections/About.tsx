@@ -29,8 +29,8 @@ export function About() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="text-lead mx-auto mt-6 max-w-[40rem]">
-              Sielp Solutions es una empresa de soluciones digitales. Trabajamos con empresas y marcas que quieren
-              comunicar mejor, y con personas que quieren compartir sus momentos importantes de una forma especial.
+              Sielp Solutions es una empresa de diseño y desarrollo de soluciones digitales. Ayudamos a empresas, marcas
+              y negocios a presentar mejor lo que hacen y a gestionar su información con herramientas a su medida.
             </p>
           </Reveal>
         </div>
